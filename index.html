@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#FFFFFF" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#121212" media="(prefers-color-scheme: dark)">
+<meta name="color-scheme" content="light dark">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Trip">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icon-180.png">
+<title>Spain, Portugal, Morocco</title>
+<style>
+:root{
+  --sat:env(safe-area-inset-top,0px); --sab:env(safe-area-inset-bottom,0px);
+  --page:#FFFFFF; --text:#222222; --muted:#717171; --line:#EBEBEB; --soft:#F7F7F7;
+  --coral:#FF385C; --dot:#3F5FA8;
+  --pin:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 30'%3E%3Cpath d='M12 0C5.4 0 0 5.2 0 11.7 0 20 12 30 12 30s12-10 12-18.3C24 5.2 18.6 0 12 0zm0 16.5a4.8 4.8 0 110-9.6 4.8 4.8 0 010 9.6z'/%3E%3C/svg%3E");
+}
+@media (prefers-color-scheme:dark){:root{
+  --page:#121212; --text:#F5F5F5; --muted:#A3A3A3; --line:#2C2C2C; --soft:#1E1E1E; --coral:#FF5A76;
+}}
+*,*::before,*::after{box-sizing:border-box}
+*{-webkit-tap-highlight-color:transparent}
+html,body{margin:0;background:var(--page)}
+body{color:var(--text);min-height:100vh;font:16px/1.4 -apple-system,BlinkMacSystemFont,"SF Pro Text","Segoe UI",Roboto,sans-serif;
+  -webkit-text-size-adjust:100%;-webkit-font-smoothing:antialiased;padding-bottom:calc(84px + var(--sab))}
+button{font:inherit;color:inherit}
+svg.i{width:1em;height:1em;stroke:currentColor;fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;flex:0 0 auto}
+
+.top{position:sticky;top:0;z-index:10;background:var(--page);padding-top:var(--sat)}
+.top.scrolled{box-shadow:0 1px 0 var(--line)}
+.strip{display:flex;gap:2px;overflow-x:auto;padding:8px 10px 0;scrollbar-width:none}
+.strip::-webkit-scrollbar{display:none}
+.chip{flex:0 0 auto;width:54px;padding:2px 0 9px;border:0;background:none;color:var(--muted);display:flex;flex-direction:column;
+  align-items:center;gap:1px;position:relative;opacity:.9}
+.chip .fl{font-size:21px;line-height:26px;filter:saturate(.9)}
+.chip b{font:600 15px/18px -apple-system,sans-serif;font-variant-numeric:tabular-nums;color:inherit}
+.chip span{font-size:11px;font-weight:500}
+.chip[aria-current="true"]{color:var(--text);opacity:1}
+.chip[aria-current="true"]::after{content:"";position:absolute;left:8px;right:8px;bottom:0;height:2px;border-radius:1px;background:var(--text)}
+.chip:not([aria-current="true"]) .fl{opacity:.55}
+.chip.today b::before{content:"";display:inline-block;width:5px;height:5px;border-radius:3px;background:var(--coral);margin-right:3px;vertical-align:2px}
+
+main{max-width:560px;margin:0 auto;padding:14px 20px 0}
+.hero{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:20px 20px 20px 22px;border-radius:24px;
+  background:color-mix(in srgb,var(--dot) 13%,var(--page));margin-bottom:6px}
+.hero h1{margin:0;font:700 clamp(26px,7.4vw,30px)/1.1 -apple-system,"SF Pro Display",sans-serif;letter-spacing:-.025em;text-wrap:balance}
+.hero p{margin:6px 0 0;font-size:14px;color:var(--muted)}
+.hero .flag{font-size:56px;line-height:1}
+.pill{display:inline-block;margin-left:8px;background:var(--coral);color:#fff;border-radius:10px;font:700 11px/18px -apple-system,sans-serif;padding:0 8px;vertical-align:1px}
+h2{margin:26px 0 4px;font:650 20px/26px -apple-system,"SF Pro Display",sans-serif;letter-spacing:-.015em}
+
+.stay{display:flex;align-items:center;gap:14px;padding:14px 0}
+.stay+.stay{border-top:1px solid var(--line)}
+.tile{width:56px;height:56px;border-radius:14px;background:var(--soft);display:flex;align-items:center;justify-content:center;font-size:26px}
+.stay .mt{flex:1;min-width:0}
+.stay .n{font-weight:600;font-size:15.5px;line-height:1.25}
+.stay .s{font-size:13.5px;color:var(--muted);margin-top:2px}
+.btn{flex:0 0 auto;display:inline-flex;align-items:center;gap:6px;height:36px;padding:0 15px;border-radius:18px;border:1px solid var(--text);
+  color:var(--text);font-weight:600;font-size:14px;text-decoration:none;background:none}
+.btn::before{content:"";width:9px;height:11px;background:var(--coral);-webkit-mask:var(--pin) center/contain no-repeat;mask:var(--pin) center/contain no-repeat}
+.btn:active{background:var(--soft)}
+
+.row{display:grid;grid-template-columns:56px 1fr;column-gap:12px;padding:14px 0}
+.row.n+.row.n{border-top:1px solid var(--line)}
+.tcol{font:600 15px/22px -apple-system,"SF Pro Text",sans-serif;font-variant-numeric:tabular-nums;padding-top:0}
+.tcol.w{font-size:12.5px;color:var(--muted);padding-top:1px}
+.cont{font-size:15.5px;line-height:22px;min-width:0;overflow-wrap:anywhere;text-wrap:pretty}
+.row.opt .cont,.row.opt .tcol{color:var(--muted)}
+.row.next .tcol{color:var(--coral)}
+.tag{display:inline-block;margin-left:8px;background:var(--coral);color:#fff;border-radius:10px;font:700 11px/18px -apple-system,sans-serif;padding:0 8px;vertical-align:1px}
+.cont a{color:var(--text);font-weight:600;text-decoration:underline;text-underline-offset:3px;text-decoration-thickness:1.5px;text-decoration-color:rgba(127,127,127,.55)}
+.cont a::before{content:"";display:inline-block;width:.55em;height:.7em;margin-right:4px;background:var(--coral);
+  -webkit-mask:var(--pin) center/contain no-repeat;mask:var(--pin) center/contain no-repeat}
+.cont a:active{opacity:.6}
+
+.row.t{padding:8px 0}
+.rc{display:flex;gap:12px;align-items:flex-start;border:1px solid var(--line);border-radius:18px;padding:14px;background:var(--page);
+  box-shadow:0 2px 10px rgba(0,0,0,.06)}
+@media (prefers-color-scheme:dark){.rc{box-shadow:none;background:var(--soft)}}
+.circ{width:42px;height:42px;border-radius:21px;background:color-mix(in srgb,var(--dot) 16%,var(--page));color:var(--text);
+  display:flex;align-items:center;justify-content:center;font-size:21px;flex:0 0 auto}
+.rc .ti{font-weight:650;font-size:15.5px;line-height:1.3}
+.rc .no{margin-top:3px;font-size:13.5px;color:var(--muted);line-height:1.35}
+.row.t .tcol{padding-top:12px}
+.row.t.next .rc{border-color:var(--coral);box-shadow:0 0 0 1px var(--coral)}
+
+.tabs{position:fixed;left:0;right:0;bottom:0;z-index:20;display:flex;background:color-mix(in srgb,var(--page) 97%,transparent);
+  -webkit-backdrop-filter:saturate(1.8) blur(18px);backdrop-filter:saturate(1.8) blur(18px);
+  border-top:1px solid var(--line);padding:7px 10px calc(7px + var(--sab))}
+.tabs button{flex:1;border:0;background:none;display:flex;flex-direction:column;align-items:center;gap:3px;color:var(--muted);
+  font-size:10.5px;font-weight:600;padding:3px 0}
+.tabs button svg{font-size:25px;stroke-width:1.6}
+.tabs button.on{color:var(--coral)}
+.tabs button:disabled{opacity:.3}
+:focus-visible{outline:3px solid var(--coral);outline-offset:2px}
+@media (prefers-reduced-motion:no-preference){.fade{animation:f .16s ease-out}@keyframes f{from{opacity:0}to{opacity:1}}}
+</style>
+</head>
+<body>
+<div class="top" id="top"><div class="strip" id="strip" role="tablist" aria-label="Days"></div></div>
+<main id="main"></main>
+<nav class="tabs">
+  <button id="prev"><svg class="i" viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg>Previous</button>
+  <button id="today"><svg class="i" viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="15.5" rx="3"/><path d="M3.5 10h17M8 3v4M16 3v4"/></svg>Today</button>
+  <button id="nextb"><svg class="i" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg>Next</button>
+</nav>
+<script>
+const DAYS=[{"c": "AU", "date": "Fri 2 Oct", "iso": "2026-10-02", "title": "Sydney → Abu Dhabi", "stay": [], "items": [["TBC", "Uber to <a href=\"https://www.google.com/maps/search/?api=1&amp;query=Sydney+Airport+%28SYD%29\" target=\"_blank\" rel=\"noopener\">Sydney airport</a> (time not set)"], ["15:40", "Etihad EY451 SYD → Abu Dhabi"], ["00:05", "Land <a href=\"https://www.google.com/maps/search/?api=1&amp;query=Zayed+International+Airport%2C+Abu+Dhabi\" target=\"_blank\" rel=\"noopener\">Abu Dhabi</a> (Sat). ~14h layover in terminal"]]}, {"c": "ES", "date": "Sat 3 Oct", "iso": "2026-10-03", "title": "Abu Dhabi → Madrid", "stay": [["Tonight", "The Social Hub Madrid", "https://maps.app.goo.gl/w4NgbaNuoDTYWKXM8"]], "items": [["14:00", "Flight <a href=\"https://www.google.com/maps/search/?api=1&amp;query=Zayed+International+Airport%2C+Abu+Dhabi\" target=\"_blank\" rel=\"noopener\">AUH Zayed Intl</a> → Madrid (7h40)"], ["19:40", "Land <a href=\"https://www.google.com/maps/search/?api=1&amp;query=Madrid-Barajas+Airport\" target=\"_blank\" rel=\"noopener\">Madrid</a>"], ["20:30", "Uber/Cabify to <a href=\"https://maps.app.goo.gl/w4NgbaNuoDTYWKXM8\" target=\"_blank\" rel=\"noopener\">The Social Hub</a> (24 min; train 41 min)"], ["21:00", "Check in, <a href=\"https://maps.app.goo.gl/w4NgbaNuoDTYWKXM8\" target=\"_blank\" rel=\"noopener\">The Social Hub Madrid</a>"], ["Opt.", "Churros at <a href=\"https://www.google.com/maps/search/?api=1&amp;query=Chocolater%C3%ADa+San+Gin%C3%A9s%2C+Madrid\" target=\"_blank\" rel=\"noopener\">Chocolatería San Ginés</a> (24/7); <a href=\"https://maps.app.goo.gl/w4NgbaNuoDTYWKXM8\" target=\"_blank\" rel=\"noopener\">rooftop bar</a>"]]}, {"c": "ES", "date": "Sun 4 Oct", "iso": "2026-10-04", "title": "Madrid", "stay": [["Tonight", "The Social Hub Madrid", "https://maps.app.goo.gl/w4NgbaNuoDTYWKXM8"]], "items": [["08:00", "Run (~1.5h): <a href=\"https://www.google.com/maps/search/?api=1&amp;query=Madrid+R%C3%ADo%2C+Madrid\" target=\"_blank\" rel=\"noopener\">Madrid Río</a> → <a href=\"https://www.google.com/maps/search/?api=1&amp;query=Casa+de+Campo%2C+Madrid\" target=\"_blank\" rel=\"noopener\">Casa de Campo</a> → Old Town. Sunrise 08:13"], ["09:00", "<a href=\"https://www.google.com/maps/search/?api=1&amp;query=El+Rastro%2C+Madrid\" target=\"_blank\" rel=\"noopener\">El Rastro flea market</a>, La Latina (09–15; go before 11)"], ["10:30", "<a href=\"https://maps.app.goo.gl/78bD6Lpq6PoiKp226\" target=\"_blank\" rel=\"noopener\">Royal Palace</a> (to 12:45; 12 min walk). <a href=\"https://www.google.com/maps/search/?api=1&amp;query=Catedral+de+la+Almudena%2C+Madrid\" target=\"_blank\" rel=\"noopener\">Almudena Cathedral</a> opposite"], ["13:00", "Lunch near <a href=\"https://www.google.com/maps/search/?api=1&amp;query=Puerta+de+Alcal%C3%A1%2C+Madrid\" target=\"_blank\" rel=\"noopener\">Puerta de Alcalá</a> (~3 km from Palace; use taxi)"], ["PM", "Free: <a href=\"https://www.google.com/maps/search/?api=1&amp;query=Plaza+de+Cibeles%2C+Madrid\" target=\"_blank\" rel=\"noopener\">Cibeles</a>, <a href=\"https://www.google.com/maps/search/?api=1&amp;query=Puerta+del+Sol%2C+Madrid\" target=\"_blank\" rel=\"noopener\">Puerta del Sol</a>, <a href=\"https://www.google.com/maps/search/?api=1&amp;query=Plaza+Mayor%2C+Madrid\" target=\"_blank\" rel=\"noopener\">Plaza Mayor</a>, <a href=\"https://www.google.com/maps/search/?api=1&amp;query=Mercado+de+San+Miguel%2C+Madrid\" target=\"_blank\" rel=\"noopener\">San Miguel Market</a>, <a href=\"https://www.google.com/maps/search/?api=1&amp;query=Parque+del+Retiro%2C+Madrid\" target=\"_blank\" rel=\"noopener\">El Retiro</a>. Opt. 2.5h walking tour from <a href=\"https://www.google.com/maps/search/?api=1&amp;query=Calle+de+Ferraz+22%2C+28008+Madrid\" target=\"_blank\" rel=\"noopener\">C. de Ferraz 22</a> (ends Plaza Mayor)"], ["17:00", "<a href=\"https://www.google.com/maps/search/?api=1&amp;query=Museo+del+Prado%2C+Madrid\" target=\"_blank\" rel=\"noopener\">Prado Museum</a> (free entry 17:00–19:00)"], ["19:00", "Snack near <a href=\"https://www.google.com/maps/search/?api=1&amp;query=Templo+de+Debod%2C+Madrid\" target=\"_blank\" rel=\"noopener\">Temple of Debod</a>"], ["19:54", "Sunset at Temple of Debod"], ["20:15", "Arrive <a href=\"https://www.google.com/maps/search/?api=1&amp;query=Teatro+Flamenco+Madrid%2C+Calle+del+Pez+10%2C+28004+Madrid\" target=\"_blank\" rel=\"noopener\">Teatro Flamenco Madrid</a> (20 min walk)"], ["20:45", "Flamenco show, 1h (BOOKED)"], ["Late", "Dinner: <a href=\"https://www.google.com/maps/search/?api=1&amp;query=Calle+Cava+Baja%2C+Madrid\" target=\"_blank\" rel=\"noopener\">La Latina (Cava Baja)</a> or <a href=\"https://www.google.com/maps/search/?api=1&amp;query=Casa+Lucio%2C+Madrid\" target=\"_blank\" rel=\"noopener\">Casa Lucio</a>. Then <a href=\"https://www.google.com/maps/search/?api=1&amp;query=Chueca%2C+Madrid\" target=\"_blank\" rel=\"noopener\">Chueca</a>/<a href=\"https://www.google.com/maps/search/?api=1&amp;query=Malasa%C3%B1a%2C+Madrid\" target=\"_blank\" rel=\"noopener\">Malasaña</a> (5 min metro)"]]}, {"c": "ES", "date": "Mon 5 Oct", "iso": "2026-10-05", "title": "Madrid → Granada", "stay": [["Check out", "The Social Hub Madrid", "https://maps.app.goo.gl/w4NgbaNuoDTYWKXM8"], ["Tonight", "Carrera del Darro 25, Granada", "https://www.google.com/maps/search/?api=1&query=Carrera+del+Darro+25%2C+18010+Granada"]], "items": [["AM", "Check out of <a href=\"https://maps.app.goo.gl/w4NgbaNuoDTYWKXM8\" target=\"_blank\" rel=\"noopener\">Social Hub</a>; be at <a href=\"https://www.google.com/maps/search/?api=1&amp;query=Estaci%C3%B3n+de+Madrid+Atocha\" target=\"_blank\" rel=\"noopener\">Madrid Atocha</a> before 10:00"], ["10:00", "Train 1: Atocha → <a href=\"https://www.google.com/maps/search/?api=1&amp;query=Estaci%C3%B3n+de+C%C3%B3rdoba+Central\" target=\"_blank\" rel=\"noopener\">Córdoba</a> (arr 11:45). Carriage 7, seats 13A/B"], ["13:06", "Train 2: Córdoba → <a href=\"https://www.google.com/maps/search/?api=1&amp;query=Estaci%C3%B3n+de+tren+de+Granada\" target=\"_blank\" rel=\"noopener\">Granada</a> (arr 14:55). Avant 08335, Carriage 3, seats 15D/16C"], ["14:55", "Uber from Granada station to <a href=\"https://www.google.com/maps/search/?api=1&amp;query=Carrera+del+Darro+25%2C+18010+Granada\" target=\"_blank\" rel=\"noopener\">Carrera del Darro 25</a>, Albaicín"], ["15:30", "Check in; drop bags"], ["16:00", "Wander: <a href=\"https://www.google.com/maps/search/?api=1&amp;query=Capilla+Real+de+Granada\" target=\"_blank\" rel=\"noopener\">Royal Chapel</a>, <a href=\"https://www.google.com/maps/search/?api=1&amp;query=Corral+del+Carb%C3%B3n%2C+Granada\" target=\"_blank\" rel=\"noopener\">Corral del Carbón</a>, <a href=\"https://www.google.com/maps/search/?api=1&amp;query=El+Ba%C3%B1uelo%2C+Granada\" target=\"_blank\" rel=\"noopener\">El Bañuelo</a> (or hammam slot)"], ["18:00", "Dinner TBC"], ["19:54", "Sunset, <a href=\"https://www.google.com/maps/search/?api=1&amp;query=Mirador+de+San+Nicol%C3%A1s%2C+Granada\" target=\"_blank\" rel=\"noopener\">Albaicín viewpoint</a>"], ["22:00", "<a href=\"https://www.google.com/maps/search/?api=1&amp;query=Hammam+Al+%C3%81ndalus%2C+Calle+Santa+Ana+16%2C+Granada\" target=\"_blank\" rel=\"noopener\">Hammam Al Ándalus</a>, Calle Santa Ana 16 (to 23:30)"]]}, {"c": "ES", "date": "Tue 6 Oct", "iso": "2026-10-06", "title": "Granada", "stay": [["Tonight", "Carrera del Darro 25, Granada", "https://www.google.com/maps/search/?api=1&query=Carrera+del+Darro+25%2C+18010+Granada"]], "items": [["08:15", "Sunrise, <a href=\"https://www.google.com/maps/search/?api=1&amp;query=Mirador+de+San+Nicol%C3%A1s%2C+Granada\" target=\"_blank\" rel=\"noopener\">Mirador de San Nicolás</a>"], ["09:30", "<a href=\"https://www.google.com/maps/search/?api=1&amp;query=Alhambra%2C+Granada\" target=\"_blank\" rel=\"noopener\">Alhambra</a> (to ~13:30). <a href=\"https://www.google.com/maps/search/?api=1&amp;query=Palacios+Nazar%C3%ADes%2C+Alhambra+Granada\" target=\"_blank\" rel=\"noopener\">Nasrid Palaces</a> first, timed slot: arrive 30 min early. Then <a href=\"https://www.google.com/maps/search/?api=1&amp;query=Generalife%2C+Granada\" target=\"_blank\" rel=\"noopener\">Generalife</a>, <a href=\"https://www.google.com/maps/search/?api=1&amp;query=Alcazaba%2C+Alhambra+Granada\" target=\"_blank\" rel=\"noopener\">Alcazaba</a>, <a href=\"https://www.google.com/maps/search/?api=1&amp;query=Palacio+de+Carlos+V%2C+Granada\" target=\"_blank\" rel=\"noopener\">Charles V Palace</a>"], ["13:30", "Lunch TBC"], ["15:00", "<a href=\"https://www.google.com/maps/search/?api=1&amp;query=Capilla+Real+de+Granada\" target=\"_blank\" rel=\"noopener\">Royal Chapel</a>, <a href=\"https://www.google.com/maps/search/?api=1&amp;query=Catedral+de+Granada\" target=\"_blank\" rel=\"noopener\">Cathedral</a>, <a href=\"https://www.google.com/maps/search/?api=1&amp;query=Carrera+del+Darro%2C+Granada\" target=\"_blank\" rel=\"noopener\">Carrera del Darro</a> (or hammam at 16:00)"], ["18:00", "Dinner TBC"], ["19:48", "Sunset, Mirador de San Nicolás (via Albaicín)"], ["Late", "Free tapas (<a href=\"https://www.google.com/maps/search/?api=1&amp;query=Los+Diamantes%2C+Granada\" target=\"_blank\" rel=\"noopener\">Los Diamantes</a>, <a href=\"https://www.google.com/maps/search/?api=1&amp;query=Bodegas+Casta%C3%B1eda%2C+Granada\" target=\"_blank\" rel=\"noopener\">Bodegas Castañeda</a>). Opt. 22:00 hammam or <a href=\"https://www.google.com/maps/search/?api=1&amp;query=Sacromonte%2C+Granada\" target=\"_blank\" rel=\"noopener\">Sacromonte</a> cave flamenco"]]}, {"c": "ES", "date": "Wed 7 Oct", "iso": "2026-10-07", "title": "Granada → Seville", "stay": [["Tonight", "Palacio Pinello, Seville", "https://maps.app.goo.gl/YcCVvEdJ26z3PBar8"]], "items": [["07:00", "Bus from <a href=\"https://www.google.com/maps/search/?api=1&amp;query=Estaci%C3%B3n+de+Autobuses+de+Granada\" target=\"_blank\" rel=\"noopener\">Granada Estación de Autobuses</a> (3h)"], ["10:00", "Arrive Seville, <a href=\"https://www.google.com/maps/search/?api=1&amp;query=Estaci%C3%B3n+de+Autobuses+Plaza+de+Armas%2C+Sevilla\" target=\"_blank\" rel=\"noopener\">Estación de Autobuses (Plaza de Armas)</a>"], ["10:30", "Bolt (~10 min) to <a href=\"https://maps.app.goo.gl/YcCVvEdJ26z3PBar8\" target=\"_blank\" rel=\"noopener\">Palacio Pinello</a>; drop bags. Ask reception to book Fri taxi and confirm pickup spot"], ["10:45", "<a href=\"https://www.google.com/maps/search/?api=1&amp;query=Barrio+Santa+Cruz%2C+Seville\" target=\"_blank\" rel=\"noopener\">Barrio Santa Cruz</a> (<a href=\"https://www.google.com/maps/search/?api=1&amp;query=Plaza+de+Santa+Cruz%2C+Seville\" target=\"_blank\" rel=\"noopener\">Plaza de Santa Cruz</a>, <a href=\"https://www.google.com/maps/search/?api=1&amp;query=Callej%C3%B3n+del+Agua%2C+Seville\" target=\"_blank\" rel=\"noopener\">Callejón del Agua</a>, <a href=\"https://www.google.com/maps/search/?api=1&amp;query=Jardines+de+Murillo%2C+Seville\" target=\"_blank\" rel=\"noopener\">Jardines de Murillo</a>)"], ["12:00", "<a href=\"https://www.google.com/maps/search/?api=1&amp;query=Archivo+de+Indias%2C+Seville\" target=\"_blank\" rel=\"noopener\">Archivo de Indias</a> (free, 30 min), opposite Alcázar"], ["12:40", "<a href=\"https://www.google.com/maps/search/?api=1&amp;query=Plaza+del+Cabildo%2C+Seville\" target=\"_blank\" rel=\"noopener\">Plaza del Cabildo</a> (5 min walk)"], ["13:15", "Lunch: <a href=\"https://www.google.com/maps/search/?api=1&amp;query=La+Brunilda%2C+Seville\" target=\"_blank\" rel=\"noopener\">La Brunilda</a>, El Arenal (arrive early)"], ["15:00", "<a href=\"https://www.google.com/maps/search/?api=1&amp;query=Torre+del+Oro%2C+Seville\" target=\"_blank\" rel=\"noopener\">Torre del Oro</a> and river walk"], ["15:45", "Palacio Pinello: check in (from 15:00), rest"], ["17:45", "Walk to <a href=\"https://www.google.com/maps/search/?api=1&amp;query=Parque+de+Mar%C3%ADa+Luisa%2C+Seville\" target=\"_blank\" rel=\"noopener\">Parque de María Luisa</a> (~18 min)"], ["19:00", "<a href=\"https://www.google.com/maps/search/?api=1&amp;query=Plaza+de+Espa%C3%B1a%2C+Seville\" target=\"_blank\" rel=\"noopener\">Plaza de España</a>; sunset ~19:55"], ["21:00", "Opt. flamenco, <a href=\"https://www.google.com/maps/search/?api=1&amp;query=Casa+de+la+Memoria%2C+Sevilla\" target=\"_blank\" rel=\"noopener\">Casa de la Memoria</a> (book; later show). Late tapas"]]}, {"c": "ES", "date": "Thu 8 Oct", "iso": "2026-10-08", "title": "Seville", "stay": [["Tonight", "Palacio Pinello, Seville", "https://maps.app.goo.gl/YcCVvEdJ26z3PBar8"]], "items": [["08:30", "Breakfast near hotel. Ryanair online check-in opens 09:20"], ["09:30", "<a href=\"https://www.google.com/maps/search/?api=1&amp;query=Real+Alc%C3%A1zar+de+Sevilla\" target=\"_blank\" rel=\"noopener\">Real Alcázar</a> guided tour (BOOKED on Viator; tickets in TS Viator). Meet at <a href=\"https://www.google.com/maps/search/?api=1&amp;query=Plaza+del+Triunfo%2C+Seville\" target=\"_blank\" rel=\"noopener\">Plaza del Triunfo</a>. 2.5–3h, bring ID"], ["12:30", "Lunch: <a href=\"https://www.google.com/maps/search/?api=1&amp;query=El+Pint%C3%B3n%2C+Sevilla\" target=\"_blank\" rel=\"noopener\">El Pintón</a> (2 min from Pinello)"], ["13:45", "Walk to <a href=\"https://www.google.com/maps/search/?api=1&amp;query=Triana%2C+Seville\" target=\"_blank\" rel=\"noopener\">Triana</a> (~15 min): <a href=\"https://www.google.com/maps/search/?api=1&amp;query=Puente+de+Isabel+II%2C+Sevilla\" target=\"_blank\" rel=\"noopener\">Isabel II Bridge</a>, <a href=\"https://www.google.com/maps/search/?api=1&amp;query=Centro+Cer%C3%A1mica+Triana%2C+Seville\" target=\"_blank\" rel=\"noopener\">Centro Cerámica Triana</a>"], ["15:00", "<a href=\"https://www.google.com/maps/search/?api=1&amp;query=Mercado+del+Barranco%2C+Seville\" target=\"_blank\" rel=\"noopener\">Mercado del Barranco</a> (by the bridge, city side)"], ["15:45", "<a href=\"https://www.google.com/maps/search/?api=1&amp;query=Catedral+de+Sevilla\" target=\"_blank\" rel=\"noopener\">Cathedral and Giralda</a> (~75 min)"], ["17:15", "Palacio Pinello: rest, pack"], ["19:20", "<a href=\"https://www.google.com/maps/search/?api=1&amp;query=Metropol+Parasol%2C+Sevilla\" target=\"_blank\" rel=\"noopener\">Las Setas</a> (8 min walk). Sunset ~19:55, light show after dark"], ["21:00", "Dinner: <a href=\"https://www.google.com/maps/search/?api=1&amp;query=Bar+El+Rinconcillo%2C+Sevilla\" target=\"_blank\" rel=\"noopener\">El Rinconcillo</a> (~5 min away)"], ["22:30", "Back to hotel; bed 23:00"]]}, {"c": "PT", "date": "Fri 9 Oct", "iso": "2026-10-09", "title": "Seville → Porto", "stay": [["Check out", "Palacio Pinello", "https://maps.app.goo.gl/YcCVvEdJ26z3PBar8"], ["Tonight", "Porto Royal Bridges Hotel", "https://maps.app.goo.gl/ryACsgqVPtNZJFMq5"]], "items": [["06:00", "Taxi from <a href=\"https://maps.app.goo.gl/YcCVvEdJ26z3PBar8\" target=\"_blank\" rel=\"noopener\">Palacio Pinello</a> to <a href=\"https://www.google.com/maps/search/?api=1&amp;query=Aeropuerto+de+Sevilla\" target=\"_blank\" rel=\"noopener\">Seville airport</a> (plan also says 06:30; confirm)"], ["07:20", "At Seville airport (SVQ)"], ["09:20", "Ryanair FR5466 SVQ → <a href=\"https://www.google.com/maps/search/?api=1&amp;query=Porto+Airport+%28OPO%29\" target=\"_blank\" rel=\"noopener\">Porto</a> (arr 09:35 local). Seats 12E/F, 20kg bag"], ["~10:00", "Collect bag; Bolt to city (~25 min)"], ["10:30", "Drop bags, <a href=\"https://maps.app.goo.gl/ryACsgqVPtNZJFMq5\" target=\"_blank\" rel=\"noopener\">Porto Royal Bridges Hotel</a> (check-in 14:00)"], ["10:40", "<a href=\"https://www.google.com/maps/search/?api=1&amp;query=Esta%C3%A7%C3%A3o+de+S%C3%A3o+Bento%2C+Porto\" target=\"_blank\" rel=\"noopener\">São Bento station</a> tiles (3 min from hotel)"], ["11:45", "<a href=\"https://www.google.com/maps/search/?api=1&amp;query=Livraria+Lello%2C+Porto\" target=\"_blank\" rel=\"noopener\">Livraria Lello</a> (pre-booked, ~8 min walk)"], ["12:30", "<a href=\"https://www.google.com/maps/search/?api=1&amp;query=Torre+dos+Cl%C3%A9rigos%2C+Porto\" target=\"_blank\" rel=\"noopener\">Clérigos Tower</a> (next to Lello)"], ["12:45", "Lunch: <a href=\"https://www.google.com/maps/search/?api=1&amp;query=Mercado+do+Bolh%C3%A3o%2C+Porto\" target=\"_blank\" rel=\"noopener\">Bolhão Market</a>"], ["14:15", "Walk via <a href=\"https://www.google.com/maps/search/?api=1&amp;query=S%C3%A9+do+Porto\" target=\"_blank\" rel=\"noopener\">Sé Cathedral</a> to <a href=\"https://www.google.com/maps/search/?api=1&amp;query=Ribeira%2C+Porto\" target=\"_blank\" rel=\"noopener\">Ribeira</a> (~15 min)"], ["15:00", "Opt. six-bridges cruise (~50 min)"], ["16:20", "Port tasting, <a href=\"https://www.google.com/maps/search/?api=1&amp;query=Taylor%27s+Port+Lodge%2C+Vila+Nova+de+Gaia\" target=\"_blank\" rel=\"noopener\">Taylor's</a>; cross lower deck of <a href=\"https://www.google.com/maps/search/?api=1&amp;query=Ponte+Lu%C3%ADs+I%2C+Porto\" target=\"_blank\" rel=\"noopener\">Dom Luís I Bridge</a>"], ["18:30", "Opt. <a href=\"https://www.google.com/maps/search/?api=1&amp;query=Telef%C3%A9rico+de+Gaia\" target=\"_blank\" rel=\"noopener\">Gaia cable car</a> to <a href=\"https://www.google.com/maps/search/?api=1&amp;query=Jardim+do+Morro%2C+Porto\" target=\"_blank\" rel=\"noopener\">Jardim do Morro</a>; sunset ~19:00"], ["19:30", "Walk Dom Luís I top deck back to São Bento side"], ["20:00", "Dinner: <a href=\"https://www.google.com/maps/search/?api=1&amp;query=Time+Out+Market+S%C3%A3o+Bento%2C+Porto\" target=\"_blank\" rel=\"noopener\">Time Out Market</a> (São Bento). ~22:00 back to hotel"]]}, {"c": "PT", "date": "Sat 10 Oct", "iso": "2026-10-10", "title": "Porto → Lisbon", "stay": [["Check out", "Porto Royal Bridges Hotel", "https://maps.app.goo.gl/ryACsgqVPtNZJFMq5"], ["Tonight", "Locke de Santa Joana, Lisbon", "https://maps.app.goo.gl/PUmjfEwUHBawJcXv6"]], "items": [["AM", "Check out of Porto hotel"], ["07:40", "Alfa Pendular AP128 <a href=\"https://maps.app.goo.gl/LZ9VZonLn693QoVNA\" target=\"_blank\" rel=\"noopener\">Porto</a> → <a href=\"https://maps.app.goo.gl/tL5z9UZk8fLXA8j18\" target=\"_blank\" rel=\"noopener\">Lisbon</a> (arr 10:22)"], ["Day", "<a href=\"https://www.google.com/maps/search/?api=1&amp;query=Alfama%2C+Lisbon\" target=\"_blank\" rel=\"noopener\">Alfama</a> walking tour (time TBC)"], ["15:00", "Check in, <a href=\"https://maps.app.goo.gl/PUmjfEwUHBawJcXv6\" target=\"_blank\" rel=\"noopener\">Locke de Santa Joana</a>"], ["18:50", "Meet at <a href=\"https://www.google.com/maps/search/?api=1&amp;query=Largo+Lu%C3%ADs+de+Cam%C3%B5es%2C+Lisbon\" target=\"_blank\" rel=\"noopener\">Largo Luís de Camões</a> for Fado show and dinner"]]}, {"c": "PT", "date": "Sun 11 Oct", "iso": "2026-10-11", "title": "Lisbon", "stay": [["Tonight", "Locke de Santa Joana, Lisbon", "https://maps.app.goo.gl/PUmjfEwUHBawJcXv6"]], "items": [["Free", "Nothing booked. Ideas: Belém (<a href=\"https://www.google.com/maps/search/?api=1&amp;query=Mosteiro+dos+Jer%C3%B3nimos%2C+Lisbon\" target=\"_blank\" rel=\"noopener\">Jerónimos</a>, <a href=\"https://www.google.com/maps/search/?api=1&amp;query=Torre+de+Bel%C3%A9m%2C+Lisbon\" target=\"_blank\" rel=\"noopener\">Belém Tower</a>), <a href=\"https://www.google.com/maps/search/?api=1&amp;query=Aqueduto+das+%C3%81guas+Livres%2C+Lisbon\" target=\"_blank\" rel=\"noopener\">Águas Livres Aqueduct</a>"]]}, {"c": "PT", "date": "Mon 12 Oct", "iso": "2026-10-12", "title": "Lisbon → Sintra (day trip)", "stay": [["Tonight", "Locke de Santa Joana, Lisbon", "https://maps.app.goo.gl/PUmjfEwUHBawJcXv6"]], "items": [["07:50", "Meet at <a href=\"https://www.google.com/maps/search/?api=1&amp;query=Esta%C3%A7%C3%A3o+do+Rossio%2C+Lisbon\" target=\"_blank\" rel=\"noopener\">Estação do Rossio</a>, by the Starbucks (tour starts 08:00)"], ["~17:00", "Back in Lisbon"]]}, {"c": "PT", "date": "Tue 13 Oct", "iso": "2026-10-13", "title": "Lisbon → Marrakech", "stay": [["Check out", "Locke de Santa Joana", "https://maps.app.goo.gl/PUmjfEwUHBawJcXv6"], ["Tonight", "Riad Palais Sebban, Marrakech", "https://maps.app.goo.gl/9YbJoB1c1gYP6S9E7"]], "items": [["11:00", "Check out of <a href=\"https://maps.app.goo.gl/PUmjfEwUHBawJcXv6\" target=\"_blank\" rel=\"noopener\">Locke de Santa Joana</a>. Rest of day free"], ["20:20", "Cabify to <a href=\"https://www.google.com/maps/search/?api=1&amp;query=Lisbon+Humberto+Delgado+Airport\" target=\"_blank\" rel=\"noopener\">Lisbon airport</a> (LIS), latest"], ["22:20", "Ryanair FR4390 LIS → Marrakech (check in via Ryanair app)"], ["Night", "<a href=\"https://maps.app.goo.gl/9YbJoB1c1gYP6S9E7\" target=\"_blank\" rel=\"noopener\">Riad Palais Sebban</a>"]]}, {"c": "MA", "date": "Wed 14 Oct", "iso": "2026-10-14", "title": "Marrakech", "stay": [["Tonight", "Riad Palais Sebban, Marrakech", "https://maps.app.goo.gl/9YbJoB1c1gYP6S9E7"]], "items": [["08:30", "<a href=\"https://www.google.com/maps/search/?api=1&amp;query=Jardin+Majorelle%2C+Marrakech\" target=\"_blank\" rel=\"noopener\">Jardin Majorelle</a> (tickets booked)"], ["09:30", "Leave; Uber ~10 min to <a href=\"https://www.google.com/maps/search/?api=1&amp;query=Caf%C3%A9+de+France%2C+Jemaa+el-Fnaa%2C+Marrakech\" target=\"_blank\" rel=\"noopener\">Restaurant Café de France</a>"], ["10:00", "Meet at Café de France: walking tour (<a href=\"https://www.google.com/maps/search/?api=1&amp;query=Bahia+Palace%2C+Marrakech\" target=\"_blank\" rel=\"noopener\">Bahia Palace</a>, <a href=\"https://www.google.com/maps/search/?api=1&amp;query=Mellah%2C+Marrakech\" target=\"_blank\" rel=\"noopener\">Mellah</a>, <a href=\"https://www.google.com/maps/search/?api=1&amp;query=Souk+Semmarine%2C+Marrakech\" target=\"_blank\" rel=\"noopener\">Souk Semmarine</a>, <a href=\"https://www.google.com/maps/search/?api=1&amp;query=Rahba+Kedima%2C+Marrakech\" target=\"_blank\" rel=\"noopener\">Rahba Kedima</a>, <a href=\"https://www.google.com/maps/search/?api=1&amp;query=Ben+Youssef+Madrasa%2C+Marrakech\" target=\"_blank\" rel=\"noopener\">Ben Youssef Madrasa</a>, <a href=\"https://www.google.com/maps/search/?api=1&amp;query=Le+Jardin+Secret%2C+Marrakech\" target=\"_blank\" rel=\"noopener\">Le Jardin Secret</a>, <a href=\"https://www.google.com/maps/search/?api=1&amp;query=Jemaa+el-Fnaa%2C+Marrakech\" target=\"_blank\" rel=\"noopener\">Jemaa el-Fnaa</a>)"], ["17:00", "Hammam and massage, <a href=\"https://www.google.com/maps/search/?api=1&amp;query=Les+Bains+de+Marrakech%2C+Marrakech\" target=\"_blank\" rel=\"noopener\">Les Bains de Marrakech</a> (booked, to 19:00)"], ["21:00", "Wander Jemaa el-Fnaa at night"], ["Note", "Cover shoulders and knees at mosques"]]}, {"c": "MA", "date": "Thu 15 Oct", "iso": "2026-10-15", "title": "Marrakech → Casablanca", "stay": [["Check out", "Riad Palais Sebban", "https://maps.app.goo.gl/9YbJoB1c1gYP6S9E7"], ["Tonight", "TheCasaEdition, Casablanca", "https://www.google.com/maps/search/?api=1&query=Bel+Azur+Sea+View+Hassan+II+Mosque+Residency%2C+Casablanca"]], "items": [["07:30", "CTM bus from <a href=\"https://www.google.com/maps/search/?api=1&amp;query=CTM+Marrakech%2C+Rue+Abou+Bakr+Seddiq\" target=\"_blank\" rel=\"noopener\">Rue Abou Bakr Seddiq</a>, Marrakech (~3h)"], ["~10:30", "Arrive <a href=\"https://www.google.com/maps/search/?api=1&amp;query=Gare+routi%C3%A8re+CTM%2C+Casablanca\" target=\"_blank\" rel=\"noopener\">Casablanca CTM station</a>; Uber to <a href=\"https://www.google.com/maps/search/?api=1&amp;query=Bel+Azur+Sea+View+Hassan+II+Mosque+Residency%2C+Casablanca\" target=\"_blank\" rel=\"noopener\">TheCasaEdition hotel</a>"], ["12:30", "Guided tour starts at hotel (<a href=\"https://www.google.com/maps/search/?api=1&amp;query=Place+des+Nations+Unies%2C+Casablanca\" target=\"_blank\" rel=\"noopener\">UN Square</a>, <a href=\"https://www.google.com/maps/search/?api=1&amp;query=March%C3%A9+Central%2C+Casablanca\" target=\"_blank\" rel=\"noopener\">Central Market</a>, <a href=\"https://www.google.com/maps/search/?api=1&amp;query=Place+Mohammed+V%2C+Casablanca\" target=\"_blank\" rel=\"noopener\">Mohammed V Square</a>, <a href=\"https://www.google.com/maps/search/?api=1&amp;query=Old+Medina%2C+Casablanca\" target=\"_blank\" rel=\"noopener\">Old Medina</a>, <a href=\"https://www.google.com/maps/search/?api=1&amp;query=Mosqu%C3%A9e+Hassan+II%2C+Casablanca\" target=\"_blank\" rel=\"noopener\">Hassan II Mosque</a>, <a href=\"https://www.google.com/maps/search/?api=1&amp;query=Parc+de+la+Ligue+Arabe%2C+Casablanca\" target=\"_blank\" rel=\"noopener\">Arab League Park</a>)"], ["17:00", "Back at hotel; chill"], ["19:00", "Dinner: <a href=\"https://www.google.com/maps/search/?api=1&amp;query=Dar+Dada%2C+Casablanca\" target=\"_blank\" rel=\"noopener\">Dar Dada</a> (booked)"], ["21:00", "<a href=\"https://www.google.com/maps/search/?api=1&amp;query=Rick%27s+Caf%C3%A9%2C+Casablanca\" target=\"_blank\" rel=\"noopener\">Rick's Café</a> (live jazz)"]]}, {"c": "AE", "date": "Fri 16 Oct", "iso": "2026-10-16", "title": "Casablanca → Dubai", "stay": [["Check out", "TheCasaEdition, Casablanca", "https://www.google.com/maps/search/?api=1&query=Bel+Azur+Sea+View+Hassan+II+Mosque+Residency%2C+Casablanca"]], "items": [["10:00", "Leave <a href=\"https://www.google.com/maps/search/?api=1&amp;query=Bel+Azur+Sea+View+Hassan+II+Mosque+Residency%2C+Casablanca\" target=\"_blank\" rel=\"noopener\">hotel</a>; hotel shuttle to airport (requested, confirm on arrival)"], ["11:00", "At <a href=\"https://www.google.com/maps/search/?api=1&amp;query=Mohammed+V+International+Airport%2C+Casablanca\" target=\"_blank\" rel=\"noopener\">Casablanca airport (CMN)</a>"], ["13:45", "Emirates EK752 CMN → Dubai (arr 01:30 Sat)"]]}, {"c": "AE", "date": "Sat 17 Oct", "iso": "2026-10-17", "title": "Dubai stopover", "stay": [], "items": [["01:30", "Land <a href=\"https://www.google.com/maps/search/?api=1&amp;query=Dubai+International+Airport\" target=\"_blank\" rel=\"noopener\">DXB</a> (20h45 connection)"], ["06:00", "Uber to <a href=\"https://www.google.com/maps/search/?api=1&amp;query=Burj+Al+Arab%2C+Dubai\" target=\"_blank\" rel=\"noopener\">Burj Al Arab</a>: sunrise, breakfast"], ["09:00", "Uber to <a href=\"https://www.google.com/maps/search/?api=1&amp;query=Al+Fahidi+Historical+Neighbourhood%2C+Dubai\" target=\"_blank\" rel=\"noopener\">Al Fahidi</a>; abra to <a href=\"https://www.google.com/maps/search/?api=1&amp;query=Dubai+Gold+Souk\" target=\"_blank\" rel=\"noopener\">Gold Souk</a> and textile market"], ["13:00", "Uber to <a href=\"https://www.google.com/maps/search/?api=1&amp;query=Dubai+Mall%2C+Dubai\" target=\"_blank\" rel=\"noopener\">Dubai Mall</a>; <a href=\"https://www.google.com/maps/search/?api=1&amp;query=Burj+Khalifa%2C+Dubai\" target=\"_blank\" rel=\"noopener\">Burj Khalifa</a> (book tickets)"], ["15:00", "<a href=\"https://www.google.com/maps/search/?api=1&amp;query=Museum+of+the+Future%2C+Dubai\" target=\"_blank\" rel=\"noopener\">Museum of the Future</a> (outside only)"], ["16:00", "1h yacht tour (~40 min Uber; departure point not in plan)"], ["~18:00", "Head back to DXB"], ["22:15", "Emirates EK416 DXB → Sydney"]]}, {"c": "AU", "date": "Sun 18 Oct", "iso": "2026-10-18", "title": "Sydney", "stay": [], "items": [["19:05", "Land <a href=\"https://www.google.com/maps/search/?api=1&amp;query=Sydney+Airport+%28SYD%29\" target=\"_blank\" rel=\"noopener\">Sydney</a> (EK416)"]]}];
+const DOT={AU:'#3F5FA8',ES:'#D64045',PT:'#1B998B',MA:'#A0529A',AE:'#C58A00'};
+const FLAG={AU:'\u{1F1E6}\u{1F1FA}',ES:'\u{1F1EA}\u{1F1F8}',PT:'\u{1F1F5}\u{1F1F9}',MA:'\u{1F1F2}\u{1F1E6}',AE:'\u{1F1E6}\u{1F1EA}'};
+const WD={Mon:'Monday',Tue:'Tuesday',Wed:'Wednesday',Thu:'Thursday',Fri:'Friday',Sat:'Saturday',Sun:'Sunday'};
+const IC={
+ plane:'<path d="M2.5 13.5l8-2.2-3.4-6.8 1.7-.6 6.3 6.2 5.4-1.5c1-.3 1.9.6 1.6 1.6-.2.6-.7 1-1.3 1.1l-5.1 1.1-2.8 6.6-1.7.3-.7-6.3-3.4.9-1.8 2.1-1.2-.4.4-3z"/>',
+ train:'<rect x="5" y="3" width="14" height="14" rx="3.5"/><path d="M5 11h14M9 21l1.8-4M15 21l-1.8-4"/><circle cx="9" cy="14.2" r=".7"/><circle cx="15" cy="14.2" r=".7"/>',
+ bus:'<rect x="4" y="3.5" width="16" height="14" rx="3"/><path d="M4 11h16M7 20.5v-3M17 20.5v-3"/><circle cx="8" cy="14.3" r=".7"/><circle cx="16" cy="14.3" r=".7"/>',
+ bed:'<path d="M3 19V6M3 15h18v4M21 15v-2.5A3 3 0 0018 9.5h-7V15"/><circle cx="7" cy="11.5" r="1.7"/>',
+ bag:'<rect x="5.5" y="7" width="13" height="13" rx="2.5"/><path d="M9.5 7V4.5h5V7M9 11v5M15 11v5"/>'
+};
+const svg=n=>'<svg class="i" viewBox="0 0 24 24">'+IC[n]+'</svg>';
+const pad=n=>String(n).padStart(2,'0');
+const now=new Date();
+const todayISO=now.getFullYear()+'-'+pad(now.getMonth()+1)+'-'+pad(now.getDate());
+const todayIdx=DAYS.findIndex(d=>d.iso===todayISO);
+let cur=todayIdx<0?0:todayIdx;
+const strip=document.getElementById('strip'),main=document.getElementById('main'),topbar=document.getElementById('top');
+const TIME=/^~?\d{1,2}:\d{2}$/;
+const minutes=s=>{const m=/^~?(\d{1,2}):(\d{2})$/.exec(s);return m?(+m[1])*60+(+m[2]):null};
+const plain=h=>h.replace(/<[^>]+>/g,'');
+const isTicket=h=>/^(Etihad|Ryanair|Emirates|Flight\b|Train \d|Alfa Pendular|CTM bus|Bus from)/.test(plain(h));
+const tkIcon=h=>{const p=plain(h);return /^(Train|Alfa)/.test(p)?'train':/^(CTM|Bus)/.test(p)?'bus':'plane'};
+const PRETTY={'Opt.':'Optional'};
+
+function buildStrip(){
+  strip.innerHTML='';
+  DAYS.forEach((d,i)=>{
+    const [wd,dn]=d.date.split(' ');
+    const b=document.createElement('button');
+    b.className='chip'+(d.iso===todayISO?' today':'');
+    b.setAttribute('role','tab');b.setAttribute('aria-label',d.date+', '+d.title);
+    b.innerHTML='<span class="fl">'+FLAG[d.c]+'</span><b>'+dn+'</b><span>'+wd+'</span>';
+    b.onclick=()=>go(i);strip.appendChild(b);
+  });
+}
+function grouped(items){
+  const names=['Morning','Afternoon','Evening'];const out=[[],[],[]];
+  let g=0,prev=-1;
+  items.forEach((it,k)=>{
+    const lab=it[0],t=minutes(lab);
+    if(lab==='AM')g=Math.max(g,0);else if(lab==='PM')g=Math.max(g,1);else if(lab==='Late'||lab==='Night')g=2;
+    else if(t!==null){ if(t>=prev){g=Math.max(g,t<720?0:t<1080?1:2);prev=t} else g=2 }
+    out[g].push([it,k]);
+  });
+  return out.map((e,i)=>({name:names[i],e})).filter(x=>x.e.length);
+}
+function rowHTML(it,k,next){
+  const [lab,html]=it, isT=TIME.test(lab), shown=PRETTY[lab]||lab;
+  const opt=lab==='Opt.'||/^Opt\./.test(plain(html));
+  const tag=next?'<span class="tag">Next</span>':'';
+  if(isTicket(html)){
+    const i=html.indexOf('. ');
+    const title=i>0?html.slice(0,i):html, note=i>0?html.slice(i+2):'';
+    return '<div class="row t'+(next?' next':'')+'"><div class="tcol'+(isT?'':' w')+'">'+shown+'</div><div class="cont"><div class="rc"><span class="circ">'+svg(tkIcon(html))+
+      '</span><div><div class="ti">'+title+tag+'</div>'+(note?'<div class="no">'+note+'</div>':'')+'</div></div></div></div>';
+  }
+  return '<div class="row n'+(next?' next':'')+(opt?' opt':'')+'"><div class="tcol'+(isT?'':' w')+'">'+shown+'</div><div class="cont">'+html+tag+'</div></div>';
+}
+function render(scroll){
+  const d=DAYS[cur];
+  document.documentElement.style.setProperty('--dot',DOT[d.c]);
+  [...strip.children].forEach((c,i)=>c.setAttribute('aria-current',i===cur?'true':'false'));
+  strip.children[cur].scrollIntoView({inline:'center',block:'nearest'});
+  let nextIdx=-1;
+  if(d.iso===todayISO){
+    const nm=now.getHours()*60+now.getMinutes();let prev=-1;
+    for(let k=0;k<d.items.length;k++){
+      const t=minutes(d.items[k][0]);if(t===null)continue;
+      if(t<prev)break;prev=t;
+      if(t>=nm-30){nextIdx=k;break}
+    }
+  }
+  const [wd,dn]=d.date.split(' ');
+  const hero='<div class="hero"><div><h1>'+d.title+'</h1><p>'+WD[wd]+' '+dn+' October &middot; Day '+(cur+1)+' of '+DAYS.length+
+    (d.iso===todayISO?'<span class="pill">Today</span>':'')+'</p></div><div class="flag">'+FLAG[d.c]+'</div></div>';
+  const stays=d.stay.length?'<h2>Where you\u2019re staying</h2>'+d.stay.map(s=>'<div class="stay"><span class="tile">'+svg(s[0]==='Tonight'?'bed':'bag')+
+    '</span><div class="mt"><div class="n">'+s[1]+'</div><div class="s">'+(s[0]==='Tonight'?'Staying tonight':'Check out')+'</div></div>'+
+    '<a class="btn" href="'+s[2]+'" target="_blank" rel="noopener">Map</a></div>').join(''):'';
+  const gs=grouped(d.items);
+  const plan=gs.map(g=>(gs.length>1?'<h2>'+g.name+'</h2>':'<h2>Plan</h2>')+g.e.map(([it,k])=>rowHTML(it,k,k===nextIdx)).join('')).join('');
+  main.innerHTML=hero+stays+plan;
+  document.getElementById('prev').disabled=cur===0;
+  document.getElementById('nextb').disabled=cur===DAYS.length-1;
+  document.getElementById('today').classList.toggle('on',cur===todayIdx);
+  if(scroll!==false){
+    window.scrollTo(0,0);
+    main.classList.remove('fade');void main.offsetWidth;main.classList.add('fade');
+    const nx=main.querySelector('.row.next');
+    if(nx)setTimeout(()=>nx.scrollIntoView({block:'center'}),40);
+  }
+}
+function go(i){cur=Math.max(0,Math.min(DAYS.length-1,i));render()}
+document.getElementById('prev').onclick=()=>go(cur-1);
+document.getElementById('nextb').onclick=()=>go(cur+1);
+document.getElementById('today').onclick=()=>go(todayIdx<0?0:todayIdx);
+window.addEventListener('scroll',()=>topbar.classList.toggle('scrolled',window.scrollY>4),{passive:true});
+let sx=null,sy=null;
+document.body.addEventListener('touchstart',e=>{if(e.target.closest('.strip'))return;sx=e.touches[0].clientX;sy=e.touches[0].clientY},{passive:true});
+document.body.addEventListener('touchend',e=>{
+  if(sx===null)return;const dx=e.changedTouches[0].clientX-sx,dy=e.changedTouches[0].clientY-sy;sx=null;
+  if(Math.abs(dx)>80&&Math.abs(dx)>Math.abs(dy)*2)go(cur+(dx<0?1:-1));
+},{passive:true});
+buildStrip();render();
+if('serviceWorker' in navigator&&location.protocol.startsWith('http')){
+  try{navigator.serviceWorker.register('sw.js').catch(()=>{})}catch(e){}
+}
+</script>
+</body>
+</html>
